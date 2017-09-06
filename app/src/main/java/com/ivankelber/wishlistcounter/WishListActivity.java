@@ -1,5 +1,6 @@
 package com.ivankelber.wishlistcounter;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ public class WishListActivity extends AppCompatActivity {
     List<String> strings = new ArrayList<String>();
     int clickCount = 0;
     ItemListView ilv;
+    NewItemDialog newItemDialog = new NewItemDialog();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,15 @@ public class WishListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                strings.add("clicked " + clickCount++);
-                ((BaseAdapter)ilv.getAdapter()).notifyDataSetChanged();
-
+                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+                newItemDialog.show(ft,"newItem");
+//                strings.add("clicked " + clickCount++);
+//                ((BaseAdapter)ilv.getAdapter()).notifyDataSetChanged();
             }
         });
     }

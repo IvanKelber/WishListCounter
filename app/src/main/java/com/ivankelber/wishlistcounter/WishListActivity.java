@@ -1,6 +1,7 @@
 package com.ivankelber.wishlistcounter;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +31,30 @@ public class WishListActivity extends AppCompatActivity {
         strings.add("Guitar");
         strings.add("DSLR");
         strings.add("Theremin");
-        for(int i = 0; i < 35; i++) {
+        for (int i = 0; i < 35; i++) {
             strings.add("" + i);
         }
+
+        newItemDialog.setPositive("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                strings.add("clicked " + clickCount++);
+                ((BaseAdapter) ilv.getAdapter()).notifyDataSetChanged();
+            }
+        });
+//        newItemDialog.setNegative("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //null
+//            }
+//        });
 
         ilv = (ItemListView) findViewById(R.id.list);
         ilv.setItems(strings);
         ilv.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClicked(String item) {
-                Log.e("ITEM CLICKED: ",item);
+                Log.e("ITEM CLICKED: ", item);
             }
         });
 
@@ -52,9 +68,10 @@ public class WishListActivity extends AppCompatActivity {
                     ft.remove(prev);
                 }
                 ft.addToBackStack(null);
-                newItemDialog.show(ft,"newItem");
-//                strings.add("clicked " + clickCount++);
-//                ((BaseAdapter)ilv.getAdapter()).notifyDataSetChanged();
+
+                newItemDialog.show(ft, "newItem");
+
+
             }
         });
     }
